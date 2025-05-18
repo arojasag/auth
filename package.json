@@ -1,7 +1,7 @@
 {
   "name": "auth_microservice",
   "version": "1.0.0",
-  "description": "This project is a microservice built on Express for authentication\r using Json Web Tokens (JWT). Authentication is made with email and\r password. Users are identified with an uuid.\r This microservice supports token invalidation through a Redis instance,\r using the whitelist approach.",
+  "description": "This project is a microservice built on Express for authentication using Json Web Tokens (JWT). Authentication is made with email and password. Users are identified with an uuid. This microservice supports token invalidation through a Redis instance, using the whitelist approach.",
   "main": "index.js",
   "scripts": {
     "prestart": "npx prisma migrate deploy",
