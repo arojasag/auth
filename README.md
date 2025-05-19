@@ -64,12 +64,6 @@ npm install
 npm run lint
 ```
 
-### Test
-
-```bash
-npm run test
-```
-
 ### Development
 
 ```bash
