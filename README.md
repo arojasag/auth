@@ -8,7 +8,13 @@ using the whitelist approach.
 
 ## Using Docker
 
+> [!IMPORTANT]
+> Make sure your `.dockerignore` file is set up correctly to exclude any
+> unnecessary files. Like so:
 
+```sh
+cat .gitignore .prodignore > .dockerignore
+```
 
 ### Building the project
 

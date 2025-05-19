@@ -1,0 +1,29 @@
+# --- .prodignore ---
+# Include at the top the file .gitignore
+
+# Deploy ignore file
+.prodignore
+
+# Vscode
+.vscode/*
+.vscode/settings.json
+.vscode/extensions.json
+
+# Node/nvm
+.nvmrc
+
+# Docs
+README.md
+LICENSE
+
+# Git
+.git/
+.gitignore
+
+# Docker
+.dockerignore
+Dockerfile
+docker-compose.yml
+
+# --- Allow list ---
+!.env
