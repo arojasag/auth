@@ -20,6 +20,11 @@ RUN npx prisma generate
 # Copy environment variables if they exist
 COPY .env* .
 
+# Check for existence of required environment variables
+COPY check_required_envs.sh .
+RUN chmod +x check_required_envs.sh
+RUN ./check_required_envs.sh
+
 # Copy tsconfig.json file
 COPY tsconfig.json .
 
