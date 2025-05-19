@@ -2,8 +2,7 @@ services:
   auth-db:
     image: postgres:latest
     hostname: auth_db
-    ports:
-      - 5432:5432
+    # The port exposed within the hostname is `5432` unless modified
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-user_db}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-meetUN}
