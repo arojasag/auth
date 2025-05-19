@@ -23,7 +23,7 @@ services:
       REDIS_CONNECTION_STRING: ${REDIS_CONNECTION_STRING:-redis://whitelist:6379}
       JWT_SECRET: ${JWT_SECRET:-defaultsecret}
       USER_TOKEN_EXPIRATION_TIME: ${USER_TOKEN_EXPIRATION_TIME:-5m}
-    restart: always
+    restart: on-failure:2 # NOTE: Service won't restart after failing twice
 
 volumes:
   postgres-data:
