@@ -6,6 +6,23 @@ password. Users are identified with an uuid.
 This microservice supports token invalidation through a Redis instance,
 using the whitelist approach.
 
+---
+
+## Table of contents
+
+- [Express JWT authentication microservice](#express-jwt-authentication-microservice)
+  - [Table of contents](#table-of-contents)
+  - [Using Docker](#using-docker)
+    - [Building the project](#building-the-project)
+    - [Running the API](#running-the-api)
+    - [Stopping and removing the API](#stopping-and-removing-the-api)
+  - [Scripts](#scripts)
+    - [Setup](#setup)
+    - [Lint](#lint)
+    - [Development](#development)
+
+---
+
 ## Using Docker
 
 > [!IMPORTANT]
