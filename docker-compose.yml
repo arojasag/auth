@@ -1,24 +1,29 @@
 services:
-  postgres:
+  auth-db:
     image: postgres:latest
-    hostname: postgres
+    hostname: auth_db
     ports:
       - 5432:5432
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-postgres}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_USER: ${POSTGRES_USER:-user_db}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-meetUN}
       POSTGRES_DB: ${POSTGRES_DB:-auth}
     volumes:
       - postgres-data:/var/lib/postgresql/data
     restart: unless-stopped
 
-  api:
+  auth-api:
     build: .
     depends_on:
-      - postgres
+      - auth-db
     ports:
       - "5000:5000"
-    restart: always
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-postgresql://user_db:meetUN@auth_db:5432/auth?schema=public}
+      REDIS_CONNECTION_STRING: ${REDIS_CONNECTION_STRING:-redis://whitelist:6379}
+      JWT_SECRET: ${JWT_SECRET:-defaultsecret}
+      USER_TOKEN_EXPIRATION_TIME: ${USER_TOKEN_EXPIRATION_TIME:-5m}
+    restart: on-failure:2 # NOTE: Service won't restart after failing twice
 
 volumes:
   postgres-data:
