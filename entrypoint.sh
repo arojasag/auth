@@ -2,6 +2,7 @@
 
 # HACK: Source .env file if it exists
 if [ -f .env ]; then
+  >&2 echo "Loading environtment from existing .env file"
   set -o allexport
   source .env
   set +o allexport

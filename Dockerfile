@@ -2,8 +2,6 @@ FROM node:22-alpine
 
 WORKDIR /app
 
-ENV PORT=5000
-
 # Copy package.json and package-lock.json files
 COPY package.json .
 COPY package-lock.json .
@@ -20,13 +18,11 @@ RUN npx prisma generate
 # Copy environment variables if they exist
 COPY .env* .
 
-# Check for existence of required environment variables
-COPY check_required_envs.sh .
-RUN chmod +x check_required_envs.sh
-RUN ./check_required_envs.sh
-
 # Copy tsconfig.json file
 COPY tsconfig.json .
+
+# Copy the entrypoint file
+COPY entrypoint.sh .
 
 # Copy all other project files
 COPY . .
@@ -34,7 +30,14 @@ COPY . .
 # Build API
 RUN npm run build
 
-# Run and expose the server
-EXPOSE ${PORT}
+# Expose the server port by default on port 5000
+EXPOSE ${PORT:-5000}
 
+# Install bash
+RUN apk add --no-cache bash
+
+# Check for existence of required environment variables
+RUN chmod +x entrypoint.sh
+
+ENTRYPOINT ["./entrypoint.sh"]
 CMD ["npm", "start"]
