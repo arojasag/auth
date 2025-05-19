@@ -1,7 +1,7 @@
 services:
-  postgres:
+  auth-db:
     image: postgres:latest
-    hostname: postgres
+    hostname: auth_db
     ports:
       - 5432:5432
     environment:
@@ -12,12 +12,14 @@ services:
       - postgres-data:/var/lib/postgresql/data
     restart: unless-stopped
 
-  api:
+  auth-api:
     build: .
     depends_on:
-      - postgres
+      - auth-db
     ports:
       - "5000:5000"
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-postgresql://postgres:auth_db@postgres:5432/auth?schema=public}
     restart: always
 
 volumes:
