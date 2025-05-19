@@ -8,45 +8,60 @@ using the whitelist approach.
 
 ## Using Docker
 
+
+
 ### Building the project
 
-To build the services it's necessary to include the environment
-variables needed to setup postgres, Redis and the JWT signing key.
-These should be stored in an `.env` file
+To build the service run the following command:
 
-  ```sh
-  docker compose --env-file .env build
-  ```
+```sh
+docker compose build
+```
 
-### Testing the  API
+It's optional to include the environment variables needed to setup
+postgres, Redis and the JWT signing key. These should be stored in
+an `.env`-ish file and you can specify it like this:
 
-In order to test the API, it is necessary to have already built the
-services. Once you've done that, you can run the following command:
-
-  ```sh
-  docker compose run --rm api npm run test:docker
-  ```
-
-The option `--rm` allows this command to automatically remove the
-container when it exits, i.e: when the test run finished.
+```sh
+docker compose --env-file .env build
+```
 
 ### Running the API
 
 In order to use the API, it is necessary to have already built the
 services. Once you've done that, you can run the following command:
 
-  ```sh
-  docker compose up
-  ```
+```sh
+docker compose up
+```
+
+If you want to run it and build it at the same time you can:
+
+1. [Remove the stale version](#stopping-and-removing-the-api)
+2. Run the following command:
+
+```sh
+docker compose up --build
+```
 
 ### Stopping and removing the API
+
+> [!TIP]
+> If you remove the volumes you will have a clean state to start with
+
+If you do not wish to get rid of the containers for services but
+preserve the volumes you can run:
+
+```sh
+docker compose down --remove-orphans
+```
 
 If you want to get rid of the containers for services and volumes,
 you should run:
 
-  ```sh
-  docker compose down --volumes
-  ```
+```sh
+docker compose down --remove-orphans --volumes
+```
 
 ## Scripts
 
