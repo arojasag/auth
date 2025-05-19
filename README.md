@@ -11,7 +11,7 @@ using the whitelist approach.
 ### Building the project
 
 To build the services it's necessary to include the environment
-variables needed to setup postgres, Redis and the JWT signing key. 
+variables needed to setup postgres, Redis and the JWT signing key.
 These should be stored in an `.env` file
 
   ```sh
