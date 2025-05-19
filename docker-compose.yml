@@ -1,6 +1,6 @@
 services:
   auth-db:
-    image: postgres:latest
+    image: postgres:17-alpine
     hostname: auth_db
     # The port exposed within the hostname is `5432` unless modified
     environment:
