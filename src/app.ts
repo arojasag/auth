@@ -3,6 +3,7 @@ import express from "express"
 import morgan from "morgan"
 import helmet from "helmet"
 import cors from "cors"
+import router from "./routes/signup"
 
 const app = express()
 
@@ -27,5 +28,7 @@ app.get<{}>('/', (req, res) => {
     message: '🦄🌈✨👋🌎🌍🌏✨🌈🦄',
   });
 });
+
+app.use(router)
 
 export default app
