@@ -1,5 +1,5 @@
 services:
-  auth-db:
+  mu_auth_db:
     image: postgres:17-alpine
     hostname: auth_db
     # The port exposed within the hostname is `5432` unless modified
@@ -11,10 +11,10 @@ services:
       - postgres-data:/var/lib/postgresql/data
     restart: unless-stopped
 
-  auth-api:
+  mu_auth_ms:
     build: .
     depends_on:
-      - auth-db
+      - mu_auth_db
     ports:
       - "5000:5000"
     environment:
