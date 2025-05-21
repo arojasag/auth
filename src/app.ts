@@ -5,12 +5,15 @@ import helmet from "helmet"
 import cors from "cors"
 import router from "./routes/signup"
 
-const app = express()
+import dotenv from "dotenv"
 
-//I use dev because this microservice won't be run in production. We aren'interested
-//in deploying it to the cloud, just in showing it running locally in class.
-//If this were a constantly running production app we would use "combined"
-app.use(morgan("dev"))
+const app = express()
+dotenv.config()
+
+const isProduction = process.env.NODE_ENV === "production"
+const morganFormat = (isProduction) ? "combined" : "dev"
+
+app.use(morgan(morganFormat))
 app.use(helmet())
 /*TODO: the default configuration of this middleware basically disables all CORS
   protection by allowing every origin and every method.
