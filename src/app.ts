@@ -3,7 +3,9 @@ import express from "express"
 import morgan from "morgan"
 import helmet from "helmet"
 import cors from "cors"
-import router from "./routes/signup"
+import signup from "./routes/signup"
+import login from "./routes/login"
+import auth_me from "./routes/auth_me"
 
 import dotenv from "dotenv"
 
@@ -32,6 +34,8 @@ app.get<{}>('/', (req, res) => {
   });
 });
 
-app.use(router)
+app.use(signup)
+app.use(login)
+app.use(auth_me)
 
 export default app
