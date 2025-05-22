@@ -1,15 +1,24 @@
 services:
   mu_auth_db:
     image: postgres:17-alpine
-    hostname: auth_db
-    # The port exposed within the hostname is `5432` unless modified
+
+    # Hostname for which the service will be reachable
+    hostname: ${mu_auth_db_HOSTNAME:-mu_auth_db}
+
+    # Ports exposed to OTHER SERVICES but NOT the HOST machine
+    expose:
+      - ${mu_auth_db_INTERNAL_PORT:-5432}
+
+    restart: always
+
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-user_db}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-meetUN}
-      POSTGRES_DB: ${POSTGRES_DB:-auth}
+      POSTGRES_USER: ${mu_auth_db_USER:-postgres}
+      POSTGRES_PASSWORD: ${mu_auth_db_PASSWORD:-meetUN}
+      POSTGRES_DB: ${mu_auth_db_DB:-meetun}
+      PGPORT: ${mu_auth_db_INTERNAL_PORT:-5432}
+
     volumes:
-      - postgres-data:/var/lib/postgresql/data
-    restart: unless-stopped
+      - mu-auth-db-data:/var/lib/postgresql/data
 
   mu_auth_ms:
     build: .
@@ -25,4 +34,4 @@ services:
     restart: on-failure:2 # NOTE: Service won't restart after failing twice
 
 volumes:
-  postgres-data:
+  mu-auth-db-data:
