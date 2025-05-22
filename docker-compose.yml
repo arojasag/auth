@@ -25,6 +25,7 @@ services:
 
     depends_on:
       - mu_auth_db
+      - mu_auth_whitelist
 
     # Hostname for which the service will be reachable
     hostname: ${mu_auth_ms_HOSTNAME:-mu_auth_ms}
@@ -47,6 +48,19 @@ services:
       port: ${mu_auth_ms_INTERNAL_PORT:-5000}
 
     restart: on-failure:2 # NOTE: Service won't restart after failing twice
+
+  mu_auth_whitelist:
+    image: valkey/valkey:8-alpine
+
+    # Hostname for which the service will be reachable
+    hostname: ${mu_auth_whitelist_HOSTNAME:-mu_auth_whitelist}
+
+    # Ports exposed to OTHER SERVICES but NOT the HOST machine
+    expose:
+      - ${mu_auth_whitelist_INTERNAL_PORT:-6379}
+
+    restart: always
+    
 
 volumes:
   mu-auth-db-data:
