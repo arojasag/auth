@@ -13,9 +13,13 @@ using the whitelist approach.
 - [Express JWT authentication microservice](#express-jwt-authentication-microservice)
   - [Table of contents](#table-of-contents)
   - [Using Docker](#using-docker)
-    - [Building the project](#building-the-project)
-    - [Running the API](#running-the-api)
-    - [Stopping and removing the API](#stopping-and-removing-the-api)
+  - [Environment variables](#environment-variables)
+    - [Generating a working `.env` file](#generating-a-working-env-file)
+  - [Building the project](#building-the-project)
+  - [Running the microservice](#running-the-microservice)
+  - [Stopping and removing the microservice](#stopping-and-removing-the-microservice)
+    - [Partially clean enviroment](#partially-clean-enviroment)
+    - [Fully clean environment](#fully-clean-environment)
   - [Scripts](#scripts)
     - [Setup](#setup)
     - [Lint](#lint)
@@ -33,7 +37,26 @@ using the whitelist approach.
 cat .gitignore .prodignore > .dockerignore
 ```
 
-### Building the project
+## Environment variables
+
+Many configurations can be set configuring a `.env` file. If you want
+to see and example about it, please go to [this file](./.env.example).
+
+> [!NOTE]
+> Once you have [created](#generating-a-working-env-file) your `.env`
+> file, you can run any docker command for
+> [building](#building-the-project) or [running](#running-the-microservice)
+> the project without having to do any extra work.
+
+### Generating a working `.env` file
+
+To generate a file based on a working template run this command:
+
+```sh
+cp .env.example .env
+```
+
+## Building the project
 
 To build the service run the following command:
 
@@ -43,15 +66,16 @@ docker compose build
 
 It's optional to include the environment variables needed to setup
 postgres, Redis and the JWT signing key. These should be stored in
-an `.env`-ish file and you can specify it like this:
+an `.env`-ish file and you can specify it like this. But it's not
+really necessary if you already have it created.
 
 ```sh
 docker compose --env-file .env build
 ```
 
-### Running the API
+## Running the microservice
 
-In order to use the API, it is necessary to have already built the
+In order to use the microservice, it is necessary to have already built the
 services. Once you've done that, you can run the following command:
 
 ```sh
@@ -60,27 +84,34 @@ docker compose up
 
 If you want to run it and build it at the same time you can:
 
-1. [Remove the stale version](#stopping-and-removing-the-api)
+1. [Remove the stale version](#stopping-and-removing-the-microservice)
 2. Run the following command:
 
 ```sh
 docker compose up --build
 ```
 
-### Stopping and removing the API
+## Stopping and removing the microservice
+
+You can produce a [partially](#partially-clean-enviroment) clean
+environment or a [clean environmentment](#fully-clean-environment).
+
+### Partially clean enviroment
 
 > [!TIP]
-> If you remove the volumes you will have a clean state to start with
-
-If you do not wish to get rid of the containers for services but
-preserve the volumes you can run:
+> If you want to have a _almost_ clean build you need to stop
+> and remove containers, networks by running:
 
 ```sh
 docker compose down --remove-orphans
 ```
 
-If you want to get rid of the containers for services and volumes,
-you should run:
+### Fully clean environment
+
+> [!WARNING]
+> The following command gives you a clean slate to start from, but it
+> remove the volumes too. So any data that you may have, it will be
+> removed as well.
 
 ```sh
 docker compose down --remove-orphans --volumes

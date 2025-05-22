@@ -27,7 +27,7 @@ COPY entrypoint.sh .
 # Copy all other project files
 COPY . .
 
-# Build API
+# Build the microservice
 RUN npm run build
 
 # Expose the server port by default on port 5000

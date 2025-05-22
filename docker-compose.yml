@@ -1,28 +1,52 @@
 services:
-  auth-db:
+  mu_auth_db:
     image: postgres:17-alpine
-    hostname: auth_db
-    # The port exposed within the hostname is `5432` unless modified
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER:-user_db}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-meetUN}
-      POSTGRES_DB: ${POSTGRES_DB:-auth}
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
-    restart: unless-stopped
 
-  auth-api:
-    build: .
-    depends_on:
-      - auth-db
-    ports:
-      - "5000:5000"
+    # Hostname for which the service will be reachable
+    hostname: ${mu_auth_db_HOSTNAME:-mu_auth_db}
+
+    # Ports exposed to OTHER SERVICES but NOT the HOST machine
+    expose:
+      - ${mu_auth_db_INTERNAL_PORT:-5432}
+
+    restart: always
+
     environment:
-      DATABASE_URL: ${DATABASE_URL:-postgresql://user_db:meetUN@auth_db:5432/auth?schema=public}
-      REDIS_CONNECTION_STRING: ${REDIS_CONNECTION_STRING:-redis://whitelist:6379}
-      JWT_SECRET: ${JWT_SECRET:-defaultsecret}
-      USER_TOKEN_EXPIRATION_TIME: ${USER_TOKEN_EXPIRATION_TIME:-5m}
+      POSTGRES_USER: ${mu_auth_db_USER:-postgres}
+      POSTGRES_PASSWORD: ${mu_auth_db_PASSWORD:-meetUN}
+      POSTGRES_DB: ${mu_auth_db_DB:-meetun}
+      PGPORT: ${mu_auth_db_INTERNAL_PORT:-5432}
+
+    volumes:
+      - mu-auth-db-data:/var/lib/postgresql/data
+
+  mu_auth_ms:
+    build: .
+
+    depends_on:
+      - mu_auth_db
+
+    # Hostname for which the service will be reachable
+    hostname: ${mu_auth_ms_HOSTNAME:-mu_auth_ms}
+
+    # Ports exposed to OTHER SERVICES but NOT the HOST machine
+    expose:
+      - ${mu_auth_ms_INTERNAL_PORT:-5000}
+
+    # Ports available on the HOST machine
+    ports:
+      - ${mu_auth_ms_EXPOSED_PORT:-5000}:${mu_auth_ms_INTERNAL_PORT:-5000}
+
+    environment:
+      # `DATABASE_URL` is constructed from the `mu_auth_db` variables, like this:
+      #   postgresql://{user}:{password}@{hostname}:{port}/{db}?sslmode=disable
+      DATABASE_URL: postgresql://${mu_auth_db_USER:-postgres}:${mu_auth_db_PASSWORD:-meetUN}@${mu_auth_db_HOSTNAME:-mu_auth_db}:${mu_auth_db_INTERNAL_PORT:-5432}/${mu_auth_db_DB:-auth}?sslmode=disable
+      REDIS_CONNECTION_STRING: ${mu_auth_ms_REDIS_CONNECTION_STRING:-redis://whitelist:6379}
+      JWT_SECRET: ${mu_auth_ms_JWT_SECRET:-defaultsecret}
+      USER_TOKEN_EXPIRATION_TIME: ${mu_auth_ms_USER_TOKEN_EXPIRATION_TIME:-5m}
+      port: ${mu_auth_ms_INTERNAL_PORT:-5000}
+
     restart: on-failure:2 # NOTE: Service won't restart after failing twice
 
 volumes:
-  postgres-data:
+  mu-auth-db-data:
