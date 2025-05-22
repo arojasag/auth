@@ -27,6 +27,8 @@ services:
       - mu_auth_db
       - mu_whitelist_db
 
+    container_name: ${mu_auth_ms_HOSTNAME:-mu_auth_ms}
+
     # Hostname for which the service will be reachable
     hostname: ${mu_auth_ms_HOSTNAME:-mu_auth_ms}
 
