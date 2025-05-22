@@ -45,7 +45,8 @@ router.post<{}, DataResponse, AuthRequest>('/signup', async (req, res, next) => 
   
     const token = jwt.sign({ id: user.id, expiresIn: process.env.USER_TOKEN_EXPIRATION_TIME as string }, 
                             process.env.JWT_SECRET as string);
-
+    //TODO: Add token to the whitelist
+    
     response.data = {uuid: user.id, jwt: token}
 
     res.status(201).json(response);
