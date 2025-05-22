@@ -43,13 +43,10 @@ router.post<{}, DataResponse, SignupRequest>('/signup', async (req, res, next) =
         return
     }
   
-    //FIXME: it seems that the jwt library has since been updated and this code no longer works
-    //const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET as string, {
-    //  expiresIn: process.env.USER_TOKEN_EXPIRATION_TIME as string,
-    //});
-
-    //TODO: add token to the response data    
-    response.data = user.id;
+    const token = jwt.sign({ id: user.id, expiresIn: process.env.USER_TOKEN_EXPIRATION_TIME as string }, 
+                            process.env.JWT_SECRET as string);
+                                
+    response.data = {uuid: user.id, jwt: token}
 
     res.status(201).json(response);
 })
