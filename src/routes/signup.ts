@@ -1,5 +1,5 @@
 import express from "express"
-import { DataResponse, SignupRequest } from "../interfaces/interfaces"
+import { DataResponse, AuthRequest } from "../interfaces/interfaces"
 
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
@@ -8,9 +8,9 @@ import { PrismaClient } from "@prisma/client";
 const router = express.Router()
 const prisma = new PrismaClient()
 
-router.post<{}, DataResponse, SignupRequest>('/signup', async (req, res, next) => {
+router.post<{}, DataResponse, AuthRequest>('/signup', async (req, res, next) => {
     const response: DataResponse = { data: null, errors: [] }
-    const { email, password } = req.body as SignupRequest
+    const { email, password } = req.body as AuthRequest
 
     if (typeof email !== 'string' || typeof password !== 'string') {
         response.errors.push({ message: 'Invalid user information has been provided' })
@@ -45,7 +45,7 @@ router.post<{}, DataResponse, SignupRequest>('/signup', async (req, res, next) =
   
     const token = jwt.sign({ id: user.id, expiresIn: process.env.USER_TOKEN_EXPIRATION_TIME as string }, 
                             process.env.JWT_SECRET as string);
-                                
+
     response.data = {uuid: user.id, jwt: token}
 
     res.status(201).json(response);
