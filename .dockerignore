@@ -152,6 +152,7 @@ dist
 # Docs
 README.md
 LICENSE
+.env.example
 
 # Git
 .git/
