@@ -9,6 +9,9 @@ import auth_me from "./routes/auth_me"
 
 import dotenv from "dotenv"
 
+import Redis from 'ioredis'
+import { MessageResponse } from "./interfaces/interfaces"
+
 const app = express()
 dotenv.config()
 
@@ -33,6 +36,22 @@ app.get<{}>('/', (req, res) => {
     message: '🦄🌈✨👋🌎🌍🌏✨🌈🦄',
   });
 });
+
+const whitelist = new Redis(process.env.REDIS_CONNECTION_STRING as string);
+
+// We provide the whitelist to each request because many endpoints need it
+// Signup and login require the whitelist to add tokens to it
+// Logout requires it to invalidate tokens
+// /auth/me requires it to verify the token is in the list
+app.use(async (_req, res, next) => {
+  res.locals.whitelist = whitelist;
+  return next();
+});
+
+app.get<{}, MessageResponse>('/ping', async (_, res) => {
+  const ping = await whitelist.ping();
+  res.json({ message: ping });
+})
 
 app.use(signup)
 app.use(login)
