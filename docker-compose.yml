@@ -60,7 +60,11 @@ services:
       - ${mu_whitelist_db_INTERNAL_PORT:-6379}
 
     restart: always
+
+    volumes:
+      - mu-whitelist-db-data:/data
     
 
 volumes:
   mu-auth-db-data:
+  mu-whitelist-db-data:
