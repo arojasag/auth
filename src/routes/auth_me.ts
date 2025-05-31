@@ -8,7 +8,7 @@ router.get<{}, DataResponse>('/auth/me', async (req, res) => {
 
     verifyToken(req, res, () => {
         const response: DataResponse = {data: null, errors: []}
-        const decodedToken = res.locals.decoded
+        const decodedToken = res.locals.decodedToken
         const userId = decodedToken.id
         response.data = {id: userId}
 
