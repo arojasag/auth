@@ -3,9 +3,11 @@ import express from "express"
 import morgan from "morgan"
 import helmet from "helmet"
 import cors from "cors"
+
 import signup from "./routes/signup"
 import login from "./routes/login"
 import auth_me from "./routes/auth_me"
+import logout from "./routes/logout"
 
 import dotenv from "dotenv"
 
@@ -56,5 +58,6 @@ app.get<{}, MessageResponse>('/ping', async (_, res) => {
 app.use(signup)
 app.use(login)
 app.use(auth_me)
+app.use(logout)
 
 export default app
