@@ -4,7 +4,7 @@ import { DataResponse, AuthRequest } from "../interfaces/interfaces"
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { PrismaClient } from "@prisma/client";
-import Redis from "ioredis";
+import type Redis from "ioredis";
 
 const router = express.Router()
 const prisma = new PrismaClient()

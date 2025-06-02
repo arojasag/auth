@@ -4,6 +4,7 @@ import { DataResponse, AuthRequest, ErrorResponse } from "../interfaces/interfac
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { PrismaClient } from "@prisma/client";
+import type Redis from "ioredis";
 
 const router = express.Router()
 const prisma = new PrismaClient()
@@ -70,7 +71,7 @@ router.post<{}, DataResponse, AuthRequest>('/login', async (req, res, next) => {
     
     // Add a token with an expiration time of just 180 seconds for now, for testing purposes
     // TODO: this should be abstracted into its own function because it is the same code that is being used in signup
-    const whitelist = res.locals.whitelist
+    const whitelist = res.locals.whitelist as Redis
     const expirationTime = process.env.mu_auth_ms_USER_TOKEN_EXPIRATION_TIME || 180
     whitelist.set(token, user.id)
     whitelist.expire(token, expirationTime)
