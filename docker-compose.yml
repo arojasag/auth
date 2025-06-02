@@ -50,7 +50,7 @@ services:
     restart: on-failure:2 # NOTE: Service won't restart after failing twice
 
   mu_whitelist_db:
-    image: redis:8-alpine
+    image: redis:7-alpine
 
     # Hostname for which the service will be reachable
     hostname: ${mu_whitelist_db_HOSTNAME:-mu_whitelist_db}
