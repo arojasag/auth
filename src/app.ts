@@ -39,7 +39,7 @@ app.get<{}>('/', (req, res) => {
   });
 });
 
-const whitelist = new Redis(process.env.REDIS_CONNECTION_STRING as string);
+const whitelist = new Redis(process.env.REDIS_CONNECTION_STRING as string)
 
 // We provide the whitelist to each request because many endpoints need it
 // Signup and login require the whitelist to add tokens to it

@@ -42,10 +42,11 @@ services:
       # `DATABASE_URL` is constructed from the `mu_auth_db` variables, like this:
       #   postgresql://{user}:{password}@{hostname}:{port}/{db}?sslmode=disable
       DATABASE_URL: postgresql://${mu_auth_db_USER}:${mu_auth_db_PASSWORD}@${mu_auth_db_HOSTNAME}:${mu_auth_db_INTERNAL_PORT}/${mu_auth_db_DB}?sslmode=disable
-      REDIS_CONNECTION_STRING: ${mu_auth_ms_REDIS_CONNECTION_STRING}
       JWT_SECRET: ${mu_auth_ms_JWT_SECRET}
       USER_TOKEN_EXPIRATION_TIME: ${mu_auth_ms_USER_TOKEN_EXPIRATION_TIME}
-      port: ${mu_auth_ms_INTERNAL_PORT}
+      INTERNAL_PORT: ${mu_auth_ms_INTERNAL_PORT}
+      EXPOSED_PORT: ${mu_auth_ms_EXPOSED_PORT}
+      REDIS_CONNECTION_STRING: redis://${mu_whitelist_db_HOSTNAME}:${mu_whitelist_db_INTERNAL_PORT}
 
     restart: on-failure:2 # NOTE: Service won't restart after failing twice
 
