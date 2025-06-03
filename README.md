@@ -39,8 +39,11 @@ cat .gitignore .prodignore > .dockerignore
 
 ## Environment variables
 
-Many configurations can be set configuring a `.env` file. If you want
-to see and example about it, please go to [this file](./.env.example).
+To run the project you have to create a `.env` file (it must be named
+exactly that). If you want to see and example about it, please go to 
+[this file](./.env.example). That is just an example for development
+purposes. When deployed to production, the variables should be set with
+secure values instead of those defaults.
 
 > [!NOTE]
 > Once you have [created](#generating-a-working-env-file) your `.env`
@@ -50,11 +53,15 @@ to see and example about it, please go to [this file](./.env.example).
 
 ### Generating a working `.env` file
 
-To generate a file based on a working template run this command:
+For development and testing purposes, you can generate an insecure
+`.env` file based on a working template by running this command:
 
 ```sh
 cp .env.example .env
 ```
+
+Remember to set the variables in the `.env` file to more secure values
+when deploying to production
 
 ## Building the project
 
@@ -62,15 +69,6 @@ To build the service run the following command:
 
 ```sh
 docker compose build
-```
-
-It's optional to include the environment variables needed to setup
-postgres, Redis and the JWT signing key. These should be stored in
-an `.env`-ish file and you can specify it like this. But it's not
-really necessary if you already have it created.
-
-```sh
-docker compose --env-file .env build
 ```
 
 ## Running the microservice
