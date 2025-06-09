@@ -21,6 +21,9 @@ COPY .env* .
 # Copy tsconfig.json file
 COPY tsconfig.json .
 
+# Copy the entrypoint file
+COPY entrypoint.sh .
+
 # Copy all other project files
 COPY . .
 
@@ -33,4 +36,8 @@ EXPOSE ${mu_auth_ms_EXPOSED_PORT:-5000}
 # Install bash
 RUN apk add --no-cache bash
 
+# Check for existence of required environment variables
+RUN chmod +x entrypoint.sh
+
+ENTRYPOINT ["./entrypoint.sh"]
 CMD ["npm", "start"]
