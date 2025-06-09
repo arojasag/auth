@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 
 import jwt, { JsonWebTokenError } from 'jsonwebtoken';
 import { DataResponse } from '../interfaces/interfaces';
+import Redis from 'ioredis';
 
 export const verifyToken = async (req: Request, res: Response<DataResponse>, next: NextFunction) => {
   const regex = /^Bearer (.+)$/;
@@ -24,15 +25,20 @@ export const verifyToken = async (req: Request, res: Response<DataResponse>, nex
       throw new JsonWebTokenError('Invalid Bearer token');
     }
 
-    const bearer = match[1];
-    //The logout endpoint needs the encoded token to remove it from the whitelist
-    res.locals.bearerToken = bearer;
+    const encodedToken = match[1];
+    // We save the encoded token because the logout endpoint needs it to remove it from the whitelist
+    res.locals.encodedToken = encodedToken;
 
-    // TODO: verify token is whitelisted. If not throw an exception
+    // We save the decoded token because the GET /auth/me endpoint needs it to easily return the user id
+    const decodedToken = jwt.verify( encodedToken, process.env.JWT_SECRET as string);
+    res.locals.decodedToken = decodedToken;
 
-    //The GET /auth/me endpoint needs the decoded token to easily return the user id
-    const decoded = jwt.verify( bearer, process.env.JWT_SECRET as string);
-    res.locals.decoded = decoded;
+
+    const whitelist = res.locals.whitelist as Redis
+    const ans = await whitelist.get(encodedToken)
+    if (ans === null) {
+      throw new Error("The token that was given is not in the whitelist")
+    }
 
     next();
   } catch (err) {

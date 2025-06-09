@@ -31,7 +31,7 @@ COPY . .
 RUN npm run build
 
 # Expose the server port by default on port 5000
-EXPOSE ${PORT:-5000}
+EXPOSE ${mu_auth_ms_EXPOSED_PORT:-5000}
 
 # Install bash
 RUN apk add --no-cache bash

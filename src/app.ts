@@ -3,11 +3,16 @@ import express from "express"
 import morgan from "morgan"
 import helmet from "helmet"
 import cors from "cors"
+
 import signup from "./routes/signup"
 import login from "./routes/login"
 import auth_me from "./routes/auth_me"
+import logout from "./routes/logout"
 
 import dotenv from "dotenv"
+
+import Redis from 'ioredis'
+import { MessageResponse } from "./interfaces/interfaces"
 
 const app = express()
 dotenv.config()
@@ -34,8 +39,25 @@ app.get<{}>('/', (req, res) => {
   });
 });
 
+const whitelist = new Redis(process.env.REDIS_CONNECTION_STRING as string)
+
+// We provide the whitelist to each request because many endpoints need it
+// Signup and login require the whitelist to add tokens to it
+// Logout requires it to invalidate tokens
+// /auth/me requires it to verify the token is in the list
+app.use(async (_req, res, next) => {
+  res.locals.whitelist = whitelist;
+  return next();
+});
+
+app.get<{}, MessageResponse>('/ping', async (_, res) => {
+  const ping = await whitelist.ping();
+  res.json({ message: ping });
+})
+
 app.use(signup)
 app.use(login)
 app.use(auth_me)
+app.use(logout)
 
 export default app
