@@ -8,6 +8,7 @@ import signup from "./routes/signup"
 import login from "./routes/login"
 import auth_me from "./routes/auth_me"
 import logout from "./routes/logout"
+import deleteAuth from "./routes/delete"
 
 import dotenv from "dotenv"
 
@@ -59,5 +60,6 @@ app.use(signup)
 app.use(login)
 app.use(auth_me)
 app.use(logout)
+app.use(deleteAuth)
 
 export default app
