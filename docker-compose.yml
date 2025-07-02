@@ -5,6 +5,8 @@ services:
     # Hostname for which the service will be reachable
     hostname: ${mu_auth_db_HOSTNAME:-mu_auth_db}
 
+    container_name: ${mu_auth_db_HOSTNAME:-mu_auth_db}
+
     # Ports exposed to OTHER SERVICES but NOT the HOST machine
     expose:
       - ${mu_auth_db_INTERNAL_PORT:-5432}
@@ -38,7 +40,7 @@ services:
 
     # Ports available on the HOST machine
     ports:
-      - ${mu_auth_ms_EXPOSED_PORT:-5000}:${mu_auth_ms_INTERNAL_PORT:-5000}
+      - ${mu_auth_ms_EXTERNAL_PORT:-5000}:${mu_auth_ms_INTERNAL_PORT:-5000}
 
     environment:
       # `DATABASE_URL` is constructed from the `mu_auth_db` variables, like this:
@@ -48,7 +50,7 @@ services:
       JWT_SECRET: ${mu_auth_ms_JWT_SECRET:-defaultsecret}
       USER_TOKEN_EXPIRATION_TIME: ${mu_auth_ms_USER_TOKEN_EXPIRATION_TIME:-300}
       INTERNAL_PORT: ${mu_auth_ms_INTERNAL_PORT:-5000}
-      EXPOSED_PORT: ${mu_auth_ms_EXPOSED_PORT:-5000}
+      EXPOSED_PORT: ${mu_auth_ms_EXTERNAL_PORT:-5000}
 
     restart: on-failure:2 # NOTE: Service won't restart after failing twice
 
@@ -57,6 +59,8 @@ services:
 
     # Hostname for which the service will be reachable
     hostname: ${mu_whitelist_db_HOSTNAME:-mu_whitelist_db}
+
+    container_name: ${mu_whitelist_db_HOSTNAME:-mu_whitelist_db}
 
     # Ports exposed to OTHER SERVICES but NOT the HOST machine
     expose:
